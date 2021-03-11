@@ -64,7 +64,7 @@ public class SimpleWebServer {
 		// PUT blah /myfile.txt
 		else if (command.equals("PUT")) {
 			/* connect br to put */
-			storeFile(br, osw, pathname);
+			storeFile(br, osw, pathname, s);
 		}
     	else {
     		/* if the request is a NOT a GET, return an error saying this server does not implement the requested command */
@@ -95,9 +95,11 @@ public class SimpleWebServer {
 	 * @param pathname
 	 * @throws Exception
 	 */
-	public void storeFile(BufferedReader br, OutputStreamWriter osw, String pathname) throws Exception{
+	public void storeFile(BufferedReader br, OutputStreamWriter osw, String pathname, Socket socket) throws Exception{
 		// Step 1. Initialize variables
 		FileWriter fw;
+		br.close();
+		br = new BufferedReader (new InputStreamReader (socket.getInputStream()));
 	
 		// Step 2. Process filename
 		if (pathname.charAt(0)=='/') {
@@ -111,22 +113,44 @@ public class SimpleWebServer {
 	
 		// Step 3. Open file to write to
 		try {
-			fw = new FileWriter(pathname);
+			System.out.println("s0");
+			fw = new FileWriter(new File(pathname), false);
+			System.out.println("s1");
 			osw.write("HTTP/1.0 201 Created");
 			osw.flush();
-/*
+			System.out.println("s2");
 			String s = br.readLine();
-	
-			// Step 4. read the lines in from the client
+			System.out.println("s3: " + s);
+/*
+public class LogFileLimit {
+    // The log file size is set to 1MB.
+    public static final int FILE_SIZE = 1024 * 1024;// For setting size 
 
+    public static void main(String[] args) {
+        Logger logger = Logger.getLogger(LogFileLimit.class.getName());
+
+        try {
+            // Create a FileHandler with 1MB file size and a single log file. We
+            // also tell the handler to append the log message.
+            FileHandler handler = new FileHandler("app.log", FILE_SIZE, 1, true); // true indicates appending.
+            logger.addHandler(handler);
+        } catch (IOException e) {
+            logger.warning("Failed to Initialize logger handler");
+        }
+    }
+}
+
+*/
+			// Step 4. read the lines in from the client
+/*
 			while (s != null) {
 				System.out.println("Step 4 writing this line to the file: " + s);
 				fw.write(s);
 				fw.flush();
 				s = br.readLine();
 			}
-*/	
-			fw.write("hello craig");
+*/
+			fw.write(s);
 	        fw.flush();
 	
 			// Step 5 close the stream

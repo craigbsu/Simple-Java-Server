@@ -17,21 +17,23 @@ public class SimpleWebClient {
                 new BufferedReader(
                     new InputStreamReader(System.in))
         ) {
-            String userInput;
-            while ((userInput = stdIn.readLine()) != null) {
+            //String userInput;
+            System.out.println("c1");
+            String[] inputs = {"PUT /myfile.txt\n", "Something\n"};
+            for (String userInput : inputs) {
+            
+            //while ((userInput = stdIn.readLine()) != null) {
+                System.out.println("c2: " + userInput);
                 out.println(userInput);
-                //out.flush();
-                System.out.println("BEFORE userInput: " + userInput);
+                out.flush();
+                System.out.println("c3");
                 String response = in.readLine();
-                System.out.println("AFTER response from server: " + response);
-                if (response != null) {
-                	System.out.println("Response from Server: ");
-                	System.out.println(response);
-                    System.out.flush();
-                	while ((response = in.readLine()) != null) {
-                		System.out.println(response);
-                	}
-                }
+                System.out.println("c4: " + response);
+//                if (response != null) {
+//                	while ((response = in.readLine()) != null) {
+//                	  System.out.println(response);
+//                	}
+//                }
             }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
